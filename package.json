@@ -1,0 +1,22 @@
+{
+  "name": "employee_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mpasricha1/employee_tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mpasricha1/employee_tracker/issues"
+  },
+  "dependencies": {
+    "inquirer": "^6.5.2"
+  },
+  "homepage": "https://github.com/mpasricha1/employee_tracker#readme"
+}
