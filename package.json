@@ -16,7 +16,8 @@
     "url": "https://github.com/mpasricha1/employee_tracker/issues"
   },
   "dependencies": {
-    "inquirer": "^6.5.2"
+    "inquirer": "^6.5.2",
+    "mysql": "^2.18.1"
   },
   "homepage": "https://github.com/mpasricha1/employee_tracker#readme"
 }

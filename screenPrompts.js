@@ -1,10 +1,10 @@
 const inquirer = require("inquirer");
 
-const selectAnOption = () => {
+const selectAnOptionPrompt = () => {
 	return inquirer.prompt([
 		{
 			type: "list", 
-			name: "select", 
+			name: "choice", 
 			message: "What would you like to do?",
 			choices: ["View All Employees", "View Employees By Department", "View Employees by Role", 
 				   "View Employees by Manager", "Add An Employee", "Add A Role", "Add A Department", 
@@ -12,6 +12,16 @@ const selectAnOption = () => {
 				   "Show Total Utilized Budget By Department"]
 		}
 	])
-}
+}; 
 
-module.exports = {selectAnOption};
+const addDepartmentPrompt = () => {
+	return inquirer.prompt([
+		{
+			type: "input", 
+			name: "department", 
+			message: "Enter Department Name: "
+		}
+	])
+};
+
+module.exports = {selectAnOptionPrompt, addDepartmentPrompt};
