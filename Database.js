@@ -16,7 +16,7 @@ class Database{
 	}
 	addADepartment(deptName){
 		let query = connection.query(
-			"INSERT INTO department(name) VALUES(?)", 
+			"INSERT INTO department SET ?", 
 			{
 				name: deptName
 			},
