@@ -14,7 +14,7 @@ class Database{
 			console.log("Connected to database")
 		})
 	}
-	insert(table, fields,){
+	insertNewRecord(table, fields,){
 		let query = connection.query(
 			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
@@ -23,24 +23,9 @@ class Database{
  			}
  		)
 	}
-	getDeptByName(deptName, callback){
+	getId(table, field, callback){
 		let query = connection.query(
-			"SELECT d.id FROM department d WHERE ?",
-			{
-				name: deptName
-			}, 
-			function(err, res){
-				if (err) throw err; 
-				return callback(res[0].id);
-			}
-		)
-	}
-	getRoleByName(role, callback){
-		let query = connection.query(
-			"SELECT r.id FROM role r WHERE ?",
-			{
-				title: role
-			}, 
+			"SELECT id FROM ?? WHERE ?",[table,field],
 			function(err, res){
 				console.log(res)
 				if (err) throw err; 
@@ -51,6 +36,7 @@ class Database{
 				}
 			}
 		)
+		console.log(query.sql);
 	}
 	getEmployeeByName(employee, callback){
 		let query = connection.query(
@@ -60,6 +46,7 @@ class Database{
 				employee[1]
 			], 
 			function(err, res){
+				console.log(res)
 				if (err) throw err; 
 				if(res.length){
 					return callback(res[0].id);
@@ -68,6 +55,7 @@ class Database{
 				}			
 			}
 		)
+		console.log(query.sql)
 	}
 	getAllEmployees(callback){
 		let query = connection.query(

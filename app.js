@@ -10,27 +10,25 @@ async function init(){
 		switch(choice.choice.toLowerCase()){
 			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
-				database.insert("department", department)
-				// database.addDepartment(department.department);
+				database.insertnewRecord("department", department)
 				break;
 			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
-				database.getDeptByName(role.department_id, (result) =>{
+				database.getId("department", {"name":role.department_id}, (result) =>{
 					role.department_id = result; 
-					database.insert("role", role)
+					database.insertNewRecord("role", role)
 				});
 				break;
 			case("add an employee"):
-				let employee = await screenPrompts.addEmployeePrompt()
-				console.log(employee)
+				let employee = await screenPrompts.addEmployeePrompt();
+				let manName = employee.manager_id ? employee.manager_id.split(" ") : [null, null]; 
 
-				let manName = employee.manager ? employee.manager.split(" ") : [null, null]; 
-				database.getRoleByName(employee.role_id, (result) => {
+				database.getId("role", {"title":employee.role_id}, (result) => {
 					employee.role_id = result; 
 
 					database.getEmployeeByName(manName, (result) =>{
 						employee.manager_id = result;
-						database.insert("employee",employee);
+						database.insertNewRecord("employee",employee);
 					});
 				});
 				break;
