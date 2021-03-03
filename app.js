@@ -7,30 +7,38 @@ async function init(){
 	try{
 	 	let choice = await screenPrompts.selectAnOptionPrompt();
 
-		switch(choice.choice){
-			case("Add A Department"):
+		switch(choice.choice.toLowerCase()){
+			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
-				database.addDepartment(department.department);
-			case("Add A Role"):
+				database.insert("department", department)
+				// database.addDepartment(department.department);
+				break;
+			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
-				database.getDeptByName(role.dept, (result) =>{
-					role.dept = result; 
-					database.addRole(role);
+				database.getDeptByName(role.department_id, (result) =>{
+					role.department_id = result; 
+					database.insert("role", role)
 				});
-			case("Add An Employee"):
+				break;
+			case("add an employee"):
 				let employee = await screenPrompts.addEmployeePrompt()
-				let manName = employee.manager.split(" "); 
-				database.getRoleByName(employee.role, (result) => {
-					employee.role = result; 
+				console.log(employee)
+
+				let manName = employee.manager ? employee.manager.split(" ") : [null, null]; 
+				database.getRoleByName(employee.role_id, (result) => {
+					employee.role_id = result; 
 
 					database.getEmployeeByName(manName, (result) =>{
-						employee.manager = result;
-						console.log(employee)
-						database.addEmployee(employee);
+						employee.manager_id = result;
+						database.insert("employee",employee);
 					});
 				});
-				
-				console.log(employee);
+				break;
+			case("view all employees"):
+				database.getAllEmployees((result) =>{
+					screenMessages.printAllEmployees(result)
+				})
+
 		}
 	}catch(err){
 		console.log(err)

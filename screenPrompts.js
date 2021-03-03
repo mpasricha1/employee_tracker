@@ -18,7 +18,7 @@ const addDepartmentPrompt = () => {
 	return inquirer.prompt([
 			{
 				type: "input", 
-				name: "department", 
+				name: "name", 
 				message: "Enter Department Name: "
 			}
 		])
@@ -38,7 +38,7 @@ const addRolePrompt = () => {
 			}, 
 			{
 				type: "input", 
-				name: "dept", 
+				name: "department_id", 
 				message: "Enter Department Name: "
 			}
 		])
@@ -58,12 +58,12 @@ const addEmployeePrompt = () => {
 			}, 
 			{
 				type: "input", 
-				name: "role", 
+				name: "role_id", 
 				message: "Enter Role: "
 			}, 
 			{
 				type: "input", 
-				name: "manager", 
+				name: "manager_id", 
 				message: "Enter Managers Name: "
 			}
 		])

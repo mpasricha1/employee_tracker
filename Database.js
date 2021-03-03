@@ -14,49 +14,14 @@ class Database{
 			console.log("Connected to database")
 		})
 	}
-	addDepartment(deptName){
+	insert(table, fields,){
 		let query = connection.query(
-			"INSERT INTO department SET ?", 
-			{
-				name: deptName
-			},
+			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
 				if (err) throw err; 
-				console.log("1 Record Inserted Into Departments");
-				connection.end()
+				console.log(`1 Record Inserted Into ${table}`);
  			}
  		)
-	}
-	addRole(role){
-		let query = connection.query(
-			"INSERT INTO role SET ?", 
-			{
-				title: role.title,
-				salary: role.salary, 
-				department_id: role.dept
-			},
-			function(err, res){
-				if (err) throw err; 
-				console.log("1 Record Inserted Into Roles");
-				connection.end()
- 			}
- 		)
-	}
-	addEmployee(employee){
-		let query = connection.query(
-				"INSERT INTO employee SET ?", 
-				{
-					first_name: employee.first_name, 
-					last_name: employee.last_name, 
-					role_id: employee.role, 
-					manager_id: employee.manager
-				}, 
-				function(err, res){
-					if (err) throw err; 
-					console.log("1 Record Inserted Into Employee");
-					connection.end()
- 			}
-		)
 	}
 	getDeptByName(deptName, callback){
 		let query = connection.query(
@@ -77,6 +42,7 @@ class Database{
 				title: role
 			}, 
 			function(err, res){
+				console.log(res)
 				if (err) throw err; 
 				if(res.length){
 					return callback(res[0].id);
@@ -92,16 +58,33 @@ class Database{
 			[
 				employee[0], 
 				employee[1]
-			]
-			, 
+			], 
 			function(err, res){
 				if (err) throw err; 
 				if(res.length){
 					return callback(res[0].id);
 				}else{
 					return callback(null);
-				}
-				
+				}			
+			}
+		)
+	}
+	getAllEmployees(callback){
+		let query = connection.query(
+			`SELECT CONCAT(e.first_name, " ",e.last_name) AS full_name,
+				    d.name AS dept_name,
+				    r.title, 
+				    r.salary,
+				    (SELECT e.first_name + e.last_name 
+				     FROM employee e2 
+				     WHERE e.manager_id = e2.id) as manager_name
+			 FROM employee e
+			 INNER JOIN role r ON r.id = e.role_id 
+			 INNER JOIN department d ON d.id = r.department_id`,
+			function(err, res){
+				if (err) throw err; 
+				return callback(res);
+
 			}
 		)
 	}

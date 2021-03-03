@@ -8,4 +8,10 @@ const printWelcomeScreen = () => {
 
 }; 
 
-module.exports = {printWelcomeScreen}
+const printAllEmployees = (employees) => {
+	employees.forEach(emp => {
+		console.log(`|${emp.full_name} | ${emp.dept_name} | ${emp.title} | ${emp.salary} | ${emp.manager_name}`)
+	})
+}
+
+module.exports = {printWelcomeScreen, printAllEmployees}
