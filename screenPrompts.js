@@ -16,12 +16,58 @@ const selectAnOptionPrompt = () => {
 
 const addDepartmentPrompt = () => {
 	return inquirer.prompt([
-		{
-			type: "input", 
-			name: "department", 
-			message: "Enter Department Name: "
-		}
-	])
+			{
+				type: "input", 
+				name: "department", 
+				message: "Enter Department Name: "
+			}
+		])
 };
 
-module.exports = {selectAnOptionPrompt, addDepartmentPrompt};
+const addRolePrompt = () => {
+	return inquirer.prompt([
+			{
+				type:"input", 
+				name: "title", 
+				message: "Enter Title: "
+			}, 
+			{
+				type: "input", 
+				name: "salary", 
+				message: "Enter Salary: "
+			}, 
+			{
+				type: "input", 
+				name: "dept", 
+				message: "Enter Department Name: "
+			}
+		])
+};
+
+const addEmployeePrompt = () => {
+	return inquirer.prompt([
+			{
+				type: "input", 
+				name: "first_name", 
+				message: "Enter First Name: "
+			}, 
+			{
+				type: "input", 
+				name: "last_name", 
+				message: "Enter Last Name: "
+			}, 
+			{
+				type: "input", 
+				name: "role", 
+				message: "Enter Role: "
+			}, 
+			{
+				type: "input", 
+				name: "manager", 
+				message: "Enter Managers Name: "
+			}
+		])
+};
+
+module.exports = {selectAnOptionPrompt, addDepartmentPrompt, addRolePrompt,  
+					addEmployeePrompt};
