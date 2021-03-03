@@ -27,7 +27,6 @@ class Database{
 		let query = connection.query(
 			"SELECT id FROM ?? WHERE ?",[table,field],
 			function(err, res){
-				console.log(res)
 				if (err) throw err; 
 				if(res.length){
 					return callback(res[0].id);
@@ -36,7 +35,6 @@ class Database{
 				}
 			}
 		)
-		console.log(query.sql);
 	}
 	getEmployeeByName(employee, callback){
 		let query = connection.query(
@@ -46,7 +44,6 @@ class Database{
 				employee[1]
 			], 
 			function(err, res){
-				console.log(res)
 				if (err) throw err; 
 				if(res.length){
 					return callback(res[0].id);
@@ -55,15 +52,14 @@ class Database{
 				}			
 			}
 		)
-		console.log(query.sql)
 	}
 	getAllEmployees(callback){
 		let query = connection.query(
-			`SELECT CONCAT(e.first_name, " ",e.last_name) AS full_name,
+			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS full_name,
 				    d.name AS dept_name,
 				    r.title, 
 				    r.salary,
-				    (SELECT e.first_name + e.last_name 
+				    (SELECT CONCAT(e.first_name, ' ',e.last_name) 
 				     FROM employee e2 
 				     WHERE e.manager_id = e2.id) as manager_name
 			 FROM employee e

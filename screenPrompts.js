@@ -69,5 +69,16 @@ const addEmployeePrompt = () => {
 		])
 };
 
+const performMorePrompt = () => {
+	return inquirer.prompt([
+			{
+				type: "input", 
+				name: "answer", 
+				message: "Do you want to do more? (y/n)"
+			}
+		])
+
+};
+
 module.exports = {selectAnOptionPrompt, addDepartmentPrompt, addRolePrompt,  
-					addEmployeePrompt};
+					addEmployeePrompt, performMorePrompt};

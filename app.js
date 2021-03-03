@@ -10,7 +10,7 @@ async function init(){
 		switch(choice.choice.toLowerCase()){
 			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
-				database.insertnewRecord("department", department)
+				database.insertNewRecord("department", department)
 				break;
 			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
@@ -33,11 +33,20 @@ async function init(){
 				});
 				break;
 			case("view all employees"):
-				database.getAllEmployees((result) =>{
+				database.getAllEmployees( (result) =>{
 					screenMessages.printAllEmployees(result)
-				})
-
+				});
+				break;
 		}
+
+		let answer = await screenPrompts.performMorePrompt();
+
+		if(answer.answer.toLowerCase() === 'y' || answer.answer.toLowerCase() === 'yes'){
+			init();
+		}else{
+			return;
+		}
+
 	}catch(err){
 		console.log(err)
 	}
