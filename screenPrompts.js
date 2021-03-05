@@ -8,7 +8,7 @@ const selectAnOptionPrompt = () => {
 			message: "What would you like to do?",
 			choices: ["View All Employees", "View Employees By Department", "View Employees by Role", 
 				   "View Employees by Manager", "Add An Employee", "Add A Role", "Add A Department", 
-				   "Update Employee Manager", "Delete Employee", "Delete a Role", "Delete a Department", 
+				   "Update Employee Manager", "Update Employee Role", "Delete Employee", "Delete a Role", "Delete a Department", 
 				   "Show Total Utilized Budget By Department"]
 		}
 	])
@@ -19,7 +19,14 @@ const addDepartmentPrompt = () => {
 			{
 				type: "input", 
 				name: "name", 
-				message: "Enter Department Name: "
+				message: "Enter Department Name: ", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
 			}
 		])
 };
@@ -29,12 +36,26 @@ const addRolePrompt = () => {
 			{
 				type:"input", 
 				name: "title", 
-				message: "Enter Title: "
+				message: "Enter Title: ", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
 			}, 
 			{
 				type: "input", 
 				name: "salary", 
-				message: "Enter Salary: "
+				message: "Enter Salary: ", 
+				validate: input => {
+					if(isNaN(parseInt(input))){
+						return "Please enter a number."
+					}else{
+						return true; 
+					}
+				}
 			}, 
 			{
 				type: "input", 
@@ -49,12 +70,26 @@ const addEmployeePrompt = () => {
 			{
 				type: "input", 
 				name: "first_name", 
-				message: "Enter First Name: "
+				message: "Enter First Name: ", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
 			}, 
 			{
 				type: "input", 
 				name: "last_name", 
-				message: "Enter Last Name: "
+				message: "Enter Last Name: ", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
 			}, 
 			{
 				type: "input", 
@@ -80,5 +115,49 @@ const performMorePrompt = () => {
 
 };
 
+const updateEmployeeRolePrompt = () => {
+	return inquirer.prompt([
+			{
+				type: "input", 
+				name: "id", 
+				message: "Which employee role do you want to update?", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
+			}, 
+			{
+				type: "input", 
+				name: "role_id", 
+				message: "Enter New Role: "
+			}
+		])
+}
+const updateEmployeeManagerPrompt = () => {
+	return inquirer.prompt([
+			{
+				type: "input", 
+				name: "id", 
+				message: "Which employee role do you want to update?", 
+				validate: input => {
+					if(!input.length){
+						return "Please enter more then one character."
+					}else{
+						return true; 
+					}
+				}
+			}, 
+			{
+				type: "input", 
+				name: "manager_id", 
+				message: "Enter New Manager: "
+			}
+		])
+}
+
 module.exports = {selectAnOptionPrompt, addDepartmentPrompt, addRolePrompt,  
-					addEmployeePrompt, performMorePrompt};
+					addEmployeePrompt, performMorePrompt, updateEmployeeRolePrompt, 
+					updateEmployeeManagerPrompt};

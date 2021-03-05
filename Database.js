@@ -59,7 +59,7 @@ class Database{
 				    d.name AS dept_name,
 				    r.title, 
 				    r.salary,
-				    (SELECT CONCAT(e.first_name, ' ',e.last_name) 
+				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
 				     FROM employee e2 
 				     WHERE e.manager_id = e2.id) as manager_name
 			 FROM employee e
@@ -72,6 +72,47 @@ class Database{
 			}
 		)
 	}
+	getAllRoles(callback){
+		let query = connection.query(
+			`SELECT r.title, r.salary, d.name FROM role r 
+				INNER JOIN department d on d.id = r.department_id`, 
+			function(err, res){
+				if(err) throw err; 
+				return callback(res);
+			}
+		)
+	}
+	getAllDepartment(callback){
+		let query = connection.query(
+			`SELECT d.name FROM departments d`, 
+			function(err, res){
+				if(err) throw err; 
+				return callback(res)
+			}
+		)
+	}
+	updateEmployeeRole(table, fields, callback){
+		let query = connection.query(
+			"UPDATE ?? SET role_id = ? WHERE id = ?",[table, fields.role_id, fields.id],
+			function(err, res){
+				if (err) throw err;
+				console.log(`1 Record Updated In ${table}`);
+			}
+		)
+		console.log(query.sql);
+	}
+	updateEmployeeManager(table, fields, callback){
+		console.log("In Function")
+		let query = connection.query(
+			"UPDATE ?? SET manager_id = ? WHERE id = ?",[table, fields.manager_id, fields.id],
+			function(err, res){
+				if (err) throw err;
+				console.log(`1 Record Updated In ${table}`);
+			}
+		)
+		console.log(query.sql);
+	}
+
 };
 
 module.exports = new Database(); 
