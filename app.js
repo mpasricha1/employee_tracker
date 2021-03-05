@@ -35,7 +35,17 @@ async function init(){
 				break;
 			case("view all employees"):
 				database.getAllEmployees( (result) =>{
-					screenMessages.printAllEmployees(result)
+					screenMessages.printAll("Employee", result)
+				});
+				break;
+			case("view all departments"):
+				database.getAllDepartments( (result) =>{
+					screenMessages.printAll("Department", result); 
+				});
+				break;
+			case("view all roles"):
+				database.getAllRoles( (result) =>{
+					screenMessages.printAll("Roles", result); 
 				});
 				break;
 			case("update employee role"):
@@ -62,15 +72,16 @@ async function init(){
 					})
 
 				});
+				break;
 		}
 
-		let answer = await screenPrompts.performMorePrompt();
+		// let answer = await screenPrompts.performMorePrompt();
 
-		if(answer.answer.toLowerCase() === 'y' || answer.answer.toLowerCase() === 'yes'){
-			init();
-		}else{
-			return;
-		}
+		// if(answer.answer.toLowerCase() === 'y' || answer.answer.toLowerCase() === 'yes'){
+		// 	init();
+		// }else{
+		// 	return;
+		// }
 
 	}catch(err){
 		console.log(err)

@@ -1,3 +1,5 @@
+const table = require("console.table")
+
 const printWelcomeScreen = () => {
 	console.log(""); 
 	console.log("-----------------------------------");
@@ -8,10 +10,11 @@ const printWelcomeScreen = () => {
 
 }; 
 
-const printAllEmployees = (employees) => {
-	employees.forEach(emp => {
-		console.log(`|${emp.full_name} | ${emp.dept_name} | ${emp.title} | ${emp.salary} | ${emp.manager_name}`)
-	})
+const printAll = (name, data) => {
+	console.log("")
+	console.log("")
+	console.table(`${name} List`, data)
 }
 
-module.exports = {printWelcomeScreen, printAllEmployees}
+
+module.exports = {printWelcomeScreen, printAll}
