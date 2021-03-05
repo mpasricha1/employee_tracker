@@ -89,15 +89,6 @@ class Database{
 			}
 		)
 	}
-	getAllDepartment(callback){
-		let query = connection.query(
-			`SELECT d.name FROM departments d`, 
-			function(err, res){
-				if(err) throw err; 
-				return callback(res)
-			}
-		)
-	}
 	updateEmployeeRole(table, fields, callback){
 		let query = connection.query(
 			"UPDATE ?? SET role_id = ? WHERE id = ?",[table, fields.role_id, fields.id],
