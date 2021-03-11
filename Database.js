@@ -55,13 +55,13 @@ class Database{
 	}
 	getAllEmployees(callback){
 		let query = connection.query(
-			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS full name,
-				    d.name AS dept name,
+			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
+				    d.name AS 'dept name',
 				    r.title, 
 				    r.salary,
 				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
 				     FROM employee e2 
-				     WHERE e.manager_id = e2.id) as manager name
+				     WHERE e.manager_id = e2.id) as 'manager name'
 			 FROM employee e
 			 INNER JOIN role r ON r.id = e.role_id 
 			 INNER JOIN department d ON d.id = r.department_id`,
@@ -71,9 +71,28 @@ class Database{
 
 			})
 		};
+	getAllEmployeesFiltered(field, value, callback){
+		let query = connection.query(
+			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
+				    d.name AS 'dept name',
+				    r.title, 
+				    r.salary,
+				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
+				     FROM employee e2 
+				     WHERE e.manager_id = e2.id) as 'manager name'
+			 FROM employee e
+			 INNER JOIN role r ON r.id = e.role_id 
+			 INNER JOIN department d ON d.id = r.department_id
+			 WHERE ?? = ?`,[field, value],
+			function(err, res){
+				if (err) throw err; 
+				return callback(res);
+
+			})
+		};
 	getAllDepartments(callback){
 		let query = connection.query(
-			`SELECT d.name as "Department Name" FROM department d`,
+			`SELECT d.name FROM department d`,
 			function(err, res){
 				if (err) throw err; 
 				return callback(res);

@@ -6,7 +6,7 @@ const selectAnOptionPrompt = () => {
 			type: "list", 
 			name: "choice", 
 			message: "What would you like to do?",
-			choices: ["View All Employees", "View All Departments", "View All Roles", 
+			choices: ["View All Employees", "View All Employees By Department", "View All Employees By Role", 
 				   "View Employees by Manager", "Add An Employee", "Add A Role", "Add A Department", 
 				   "Update Employee Manager", "Update Employee Role", "Delete Employee", "Delete a Role", "Delete a Department", 
 				   "Show Total Utilized Budget By Department"]
@@ -158,6 +158,18 @@ const updateEmployeeManagerPrompt = () => {
 		])
 }
 
+const generateSelectList = (list, returnName, message) => {
+	return inquirer.prompt([
+			{
+				type: "list", 
+				name: returnName, 
+				message: message,
+				choices: list
+			}
+		])
+
+}
+
 module.exports = {selectAnOptionPrompt, addDepartmentPrompt, addRolePrompt,  
 					addEmployeePrompt, performMorePrompt, updateEmployeeRolePrompt, 
-					updateEmployeeManagerPrompt};
+					updateEmployeeManagerPrompt, generateSelectList};

@@ -38,9 +38,26 @@ async function init(){
 					screenMessages.printAll("Employee", result)
 				});
 				break;
-			case("view all departments"):
-				database.getAllDepartments( (result) =>{
-					screenMessages.printAll("Department", result); 
+			case("view all employees by department"):
+				database.getAllDepartments( async (result) =>{
+					let deptArr = []; 
+					result.forEach(r => deptArr.push(r.name))
+					let dept = await screenPrompts.generateSelectList(deptArr, "department", "Search Employee's for Which department: ")
+
+					database.getAllEmployeesFiltered("d\.name", dept.department, (result) =>{
+						screenMessages.printAll("Department", result);
+					}) 
+				});
+				break;
+			case("view all employees by role"):
+				database.getAllRoles( async (result) =>{
+					let roleArr = []; 
+					result.forEach(r => roleArr.push(r.title))
+					let role = await screenPrompts.generateSelectList(roleArr, "title", "Search Employee's for Which Role: ")
+					console.log(role)
+					database.getAllEmployeesFiltered("r.title", role.title, (result) =>{
+						screenMessages.printAll("Role", result);
+					}) 
 				});
 				break;
 			case("view all roles"):
