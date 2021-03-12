@@ -14,7 +14,7 @@ class Database{
 			console.log("Connected to database")
 		})
 	}
-	insertNewRecord(table, fields,){
+	insertNewRecord(table, fields){
 		let query = connection.query(
 			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
@@ -55,7 +55,8 @@ class Database{
 	}
 	getAllEmployees(callback){
 		let query = connection.query(
-			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
+			`SELECT e.id, 
+				    CONCAT(e.first_name, ' ',e.last_name) AS 'full_name',
 				    d.name AS 'dept name',
 				    r.title, 
 				    r.salary,
@@ -73,7 +74,8 @@ class Database{
 		};
 	getAllEmployeesFiltered(field, value, callback){
 		let query = connection.query(
-			`SELECT CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
+			`SELECT e.id,
+					CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
 				    d.name AS 'dept name',
 				    r.title, 
 				    r.salary,
@@ -92,7 +94,7 @@ class Database{
 		};
 	getAllDepartments(callback){
 		let query = connection.query(
-			`SELECT d.name FROM department d`,
+			`SELECT d.id, d.name FROM department d`,
 			function(err, res){
 				if (err) throw err; 
 				return callback(res);
@@ -100,7 +102,7 @@ class Database{
 	}
 	getAllRoles(callback){
 		let query = connection.query(
-			`SELECT r.title, r.salary, d.name as "department Name" FROM role r 
+			`SELECT r.id, r.title, r.salary, d.name as "department_name" FROM role r 
 				INNER JOIN department d on d.id = r.department_id`, 
 			function(err, res){
 				if(err) throw err; 
@@ -108,28 +110,27 @@ class Database{
 			}
 		)
 	}
-	updateEmployeeRole(table, fields, callback){
+	updateAValue(table, fields, callback){
+		console.log(fields)
 		let query = connection.query(
-			"UPDATE ?? SET role_id = ? WHERE id = ?",[table, fields.role_id, fields.id],
+			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
 				if (err) throw err;
 				console.log(`1 Record Updated In ${table}`);
 			}
 		)
-		console.log(query.sql);
 	}
-	updateEmployeeManager(table, fields, callback){
-		console.log("In Function")
+	deleteAValue(table, field, callback){
 		let query = connection.query(
-			"UPDATE ?? SET manager_id = ? WHERE id = ?",[table, fields.manager_id, fields.id],
+			"DELETE FROM ?? WHERE id = ?", [table, field],
 			function(err, res){
-				if (err) throw err;
+				if (err) throw err; 
 				console.log(`1 Record Updated In ${table}`);
-			}
-		)
-		console.log(query.sql);
-	}
+			});
 
+		console.log(query.sql)
+	}
+	
 };
 
 module.exports = new Database(); 

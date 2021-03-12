@@ -60,9 +60,15 @@ async function init(){
 					}) 
 				});
 				break;
-			case("view all roles"):
-				database.getAllRoles( (result) =>{
-					screenMessages.printAll("Roles", result); 
+			case("view all employees by manager"):
+				database.getAllRoles( async (result) =>{
+					let roleArr = []; 
+					result.forEach(r => roleArr.push(r.title))
+					let role = await screenPrompts.generateSelectList(roleArr, "title", "Search Employee's for Which Role: ")
+					console.log(role)
+					database.getAllEmployeesFiltered("r.title", role.title, (result) =>{
+						screenMessages.printAll("Role", result);
+					}) 
 				});
 				break;
 			case("update employee role"):
@@ -73,7 +79,7 @@ async function init(){
 					database.getId("role", {"title": updateRole.role_id}, (result) => {
 						updateRole.role_id = result;
 
-						database.updateEmployeeRole("employee",updateRole);
+						database.updateAValue("employee",updateRole);
 					})
 
 				});
@@ -85,20 +91,48 @@ async function init(){
 					updateManager.id = result; 
 					database.getEmployeeByName(utils.splitName(updateManager.manager_id), (result) =>{
 						updateManager.manager_id = result; 
-						database.updateEmployeeManager("employee",updateManager);
+						database.updateAValue("employee",updateManager);
 					})
 
 				});
 				break;
+			case("delete employee"):
+				database.getAllEmployees( async (result) =>{
+					let empArr = []; 
+					result.forEach(r => empArr.push(r.full_name))
+					let emp = await screenPrompts.generateSelectList(empArr, "employee", "Select an employee to delete: ")
+					console.log(emp)
+
+					database.getEmployeeByName(utils.splitName(emp.employee), (result) =>{
+						emp.id = result; 
+						database.deleteAValue("employee", emp.id); 
+					});
+				});
+				break;
+			case("delete a role"):
+				database.getAllRoles( async (result) =>{
+					let roleArr = []; 
+					result.forEach(r => roleArr.push(r.title))
+
+					let role = await screenPrompts.generateSelectList(roleArr, "role", "Select a role to delete: ")
+					role = result.filter(r => r.title === role.role)
+					console.log(role)
+
+					database.deleteAValue("role", role[0].id);
+				});
+				break;
+			case("delete a department"):
+				database.getAllDepartments( async (result) =>{
+					let deptArr = []; 
+					result.forEach(r => deptArr.push(r.name))
+
+					let dept = await screenPrompts.generateSelectList(deptArr, "dept", "Select a department to delete: ")
+					dept = result.filter(r => r.name === dept.dept)
+
+					database.deleteAValue("department", dept[0].id);
+				});
 		}
 
-		// let answer = await screenPrompts.performMorePrompt();
-
-		// if(answer.answer.toLowerCase() === 'y' || answer.answer.toLowerCase() === 'yes'){
-		// 	init();
-		// }else{
-		// 	return;
-		// }
 
 	}catch(err){
 		console.log(err)
