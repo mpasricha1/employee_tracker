@@ -72,27 +72,43 @@ async function init(){
 				});
 				break;
 			case("update employee role"):
-				let updateRole = await screenPrompts.updateEmployeeRolePrompt();
-				database.getEmployeeByName(utils.splitName(updateRole.id), (result) =>{
-					updateRole.id = result; 
+				database.getAllEmployees( async (result) =>{
+					database.getAllRoles( async (result2) =>{
+						let empArr = [];
+						let roleArr = [];
 
-					database.getId("role", {"title": updateRole.role_id}, (result) => {
-						updateRole.role_id = result;
+						result.forEach(r => empArr.push(r.full_name))
+						result2.forEach(r => roleArr.push(r.title))
 
-						database.updateAValue("employee",updateRole);
-					})
+						let emp = await screenPrompts.generateSelectList(empArr, "name", "Select an employee to update their role: ");
+						let role = await screenPrompts.generateSelectList(roleArr, "name", "Select a new role: ");
+						
+						emp = result.filter(r => r.full_name === emp.name);
+						role = result2.filter(r => r.title === role.name);
 
+						emp[0].role_id = role[0].id;
+						delete emp[0]["manager_id"]; 
+
+						database.updateAValue("employee",emp[0]);
+					});
 				});
 				break;
 			case("update employee manager"):
-				let updateManager = await screenPrompts.updateEmployeeManagerPrompt();
 
-				database.getEmployeeByName(utils.splitName(updateManager.id), (result) =>{
-					updateManager.id = result; 
-					database.getEmployeeByName(utils.splitName(updateManager.manager_id), (result) =>{
-						updateManager.manager_id = result; 
-						database.updateAValue("employee",updateManager);
-					})
+				database.getAllEmployees( async (result) =>{
+					let empArr = []; 
+					
+					result.forEach(r => empArr.push(r.full_name))
+
+					let emp = await screenPrompts.generateSelectList(empArr, "name", "Select an employee to update their manager: ");
+					let man = await screenPrompts.generateSelectList(empArr, "name", "Select a new manager: ");
+					
+					emp = result.filter(r => r.full_name === emp.name);
+					man = result.filter(r => r.full_name === man.name);
+
+					emp[0].manager_id = man[0].id;
+
+					database.updateAValue("employee",emp[0]);
 
 				});
 				break;
@@ -100,13 +116,12 @@ async function init(){
 				database.getAllEmployees( async (result) =>{
 					let empArr = []; 
 					result.forEach(r => empArr.push(r.full_name))
-					let emp = await screenPrompts.generateSelectList(empArr, "employee", "Select an employee to delete: ")
-					console.log(emp)
+					
+					let emp = await screenPrompts.generateSelectList(empArr, "name", "Select an employee to delete: ")
+					emp = result.filter(r => r.full_name === emp.name)
 
-					database.getEmployeeByName(utils.splitName(emp.employee), (result) =>{
-						emp.id = result; 
-						database.deleteAValue("employee", emp.id); 
-					});
+					database.deleteAValue("employee", emp[0].id);
+
 				});
 				break;
 			case("delete a role"):
@@ -116,7 +131,6 @@ async function init(){
 
 					let role = await screenPrompts.generateSelectList(roleArr, "role", "Select a role to delete: ")
 					role = result.filter(r => r.title === role.role)
-					console.log(role)
 
 					database.deleteAValue("role", role[0].id);
 				});

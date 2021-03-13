@@ -56,13 +56,17 @@ class Database{
 	getAllEmployees(callback){
 		let query = connection.query(
 			`SELECT e.id, 
+					(SELECT e2.id 
+				     FROM employee e2 
+				     WHERE e.manager_id = e2.id) as 'manager_id',
+				    r.id as role_id,
 				    CONCAT(e.first_name, ' ',e.last_name) AS 'full_name',
 				    d.name AS 'dept name',
 				    r.title, 
 				    r.salary,
 				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
 				     FROM employee e2 
-				     WHERE e.manager_id = e2.id) as 'manager name'
+				     WHERE e.manager_id = e2.id) as 'manager_name'    
 			 FROM employee e
 			 INNER JOIN role r ON r.id = e.role_id 
 			 INNER JOIN department d ON d.id = r.department_id`,
@@ -81,7 +85,7 @@ class Database{
 				    r.salary,
 				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
 				     FROM employee e2 
-				     WHERE e.manager_id = e2.id) as 'manager name'
+				     WHERE e.manager_id = e2.id) as 'manager_name'
 			 FROM employee e
 			 INNER JOIN role r ON r.id = e.role_id 
 			 INNER JOIN department d ON d.id = r.department_id
@@ -111,7 +115,6 @@ class Database{
 		)
 	}
 	updateAValue(table, fields, callback){
-		console.log(fields)
 		let query = connection.query(
 			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
@@ -119,6 +122,7 @@ class Database{
 				console.log(`1 Record Updated In ${table}`);
 			}
 		)
+		console.log
 	}
 	deleteAValue(table, field, callback){
 		let query = connection.query(
