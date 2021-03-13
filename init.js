@@ -12,6 +12,7 @@ async function init(){
 			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
 				database.insertNewRecord("department", department)
+				init();
 				break;
 			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
@@ -173,8 +174,5 @@ async function init(){
 		console.log(err)
 	};
 }
-
-screenMessages.printWelcomeScreen();
-init();
 
 module.exports = {init}

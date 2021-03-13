@@ -19,7 +19,7 @@ class Database{
 			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
 				if (err) throw err; 
-				console.log(`1 Record Inserted Into ${table}`);
+				// console.log(`1 Record Inserted Into ${table}`);
  			}
  		)
 	}
@@ -28,7 +28,7 @@ class Database{
 			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
 				if (err) throw err;
-				console.log(`1 Record Updated In ${table}`);
+				// console.log(`1 Record Updated In ${table}`);
 			}
 		)
 		console.log
@@ -38,7 +38,7 @@ class Database{
 			"DELETE FROM ?? WHERE id = ?", [table, field],
 			function(err, res){
 				if (err) throw err; 
-				console.log(`1 Record Updated In ${table}`);
+				// console.log(`1 Record Updated In ${table}`);
 			});
 
 		console.log(query.sql)
