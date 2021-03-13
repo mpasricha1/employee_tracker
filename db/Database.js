@@ -1,4 +1,5 @@
 const mysql = require("mysql");
+const screenMessages = require("../utils/screenMessages.js"); 
 
 const connection = mysql.createConnection({
 	host: "localhost", 
@@ -14,21 +15,22 @@ class Database{
 			console.log("Connected to database")
 		})
 	}
-	insertNewRecord(table, fields){
+	insertNewRecord(table, fields, callback){
 		let query = connection.query(
 			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
 				if (err) throw err; 
 				// console.log(`1 Record Inserted Into ${table}`);
+				screenMessages.confirmChange();
  			}
  		)
- 		return;
 	}
 	updateAValue(table, fields, callback){
 		let query = connection.query(
 			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
 				if (err) throw err;
+				screenMessages.confirmChange();
 			}
 		)
 	}
@@ -36,7 +38,8 @@ class Database{
 		let query = connection.query(
 			"DELETE FROM ?? WHERE id = ?", [table, field],
 			function(err, res){
-				if (err) throw err; 
+				if (err) throw err;
+				screenMessages.confirmChange();
 			}
 		);
 	}
