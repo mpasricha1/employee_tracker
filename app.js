@@ -1,7 +1,7 @@
-const screenMessages = require("./screenMessages"); 
-const screenPrompts = require("./screenPrompts"); 
-const database = require("./Database"); 
-const utils = require("./utils");
+const screenMessages = require("./utils/screenMessages.js"); 
+const screenPrompts = require("./utils/screenPrompts.js"); 
+const database = require("./db/Database.js"); 
+const utils = require("./utils/utils.js");
 
 
 async function init(){
@@ -35,7 +35,7 @@ async function init(){
 				break;
 			case("view all employees"):
 				database.getAllEmployees( (result) =>{
-					screenMessages.printAll("Employee", result)
+					screenMessages.printAll("Employee", result, true)
 				});
 				break;
 			case("view employees by department"):
@@ -50,7 +50,7 @@ async function init(){
 						dept = result.filter(r => r.dept_name === dept.name)
 						console.log(dept)
 
-						screenMessages.printAll("Department", dept);
+						screenMessages.printAll("Department", dept, true);
 					});
 				});
 				break;
@@ -65,7 +65,7 @@ async function init(){
 
 						role = result.filter(r => r.title === role.name)
 
-						screenMessages.printAll("Role", role);
+						screenMessages.printAll("Role", role, true);
 					});
 				});
 				break;
@@ -78,7 +78,7 @@ async function init(){
 					let man = await screenPrompts.generateSelectList(empArr, "name", "Search employee's for which manager: ")
 					emp = result.filter(r => r.manager_name === man.name);
 
-					screenMessages.printAll("Manager", emp);
+					screenMessages.printAll("Manager", emp, true);
 	
 				});
 				break;
@@ -105,7 +105,6 @@ async function init(){
 				});
 				break;
 			case("update employee manager"):
-
 				database.getAllEmployees( async (result) =>{
 					let empArr = []; 
 					
@@ -156,12 +155,24 @@ async function init(){
 
 					database.deleteAValue("department", dept[0].id);
 				});
+				break;
+			case("show total utilized budget by department"):
+				database.getTotalUtilizedSalary( (result) =>{
+					screenMessages.printAll("Budget", result, false);
+				}); 
+				break;
+
+			case("quit"):
+				database.exit();
+				process.exit(1);
+			default:
+				console.log("Please select an option"); 
+				init();
 		}
-
-
 	}catch(err){
 		console.log(err)
-	}
+	};
+	
 }
 
 init();
