@@ -22,26 +22,23 @@ class Database{
 				// console.log(`1 Record Inserted Into ${table}`);
  			}
  		)
+ 		return;
 	}
 	updateAValue(table, fields, callback){
 		let query = connection.query(
 			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
 				if (err) throw err;
-				// console.log(`1 Record Updated In ${table}`);
 			}
 		)
-		console.log
 	}
 	deleteAValue(table, field, callback){
 		let query = connection.query(
 			"DELETE FROM ?? WHERE id = ?", [table, field],
 			function(err, res){
 				if (err) throw err; 
-				// console.log(`1 Record Updated In ${table}`);
-			});
-
-		console.log(query.sql)
+			}
+		);
 	}
 	getId(table, field, callback){
 		let query = connection.query(

@@ -28,6 +28,6 @@ const confirmChange = () => {
 	app.init();
 }
 
-module.exports = {printWelcomeScreen, printAll}
+module.exports = {printWelcomeScreen, printAll, confirmChange}
 
 const app = require("../init");

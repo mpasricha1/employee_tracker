@@ -11,14 +11,16 @@ async function init(){
 		switch(choice.choice.toLowerCase()){
 			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
-				database.insertNewRecord("department", department)
-				init();
+				database.insertNewRecord("department", department); 
+				console.log("at this code")
+				screenMessages.confirmChange();
 				break;
 			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
 				database.getId("department", {"name":role.department_id}, (result) =>{
 					role.department_id = result; 
 					database.insertNewRecord("role", role)
+					screenMessages.confirmChange();
 				});
 				break;
 			case("add an employee"):
@@ -31,6 +33,7 @@ async function init(){
 					database.getEmployeeByName(manName, (result) =>{
 						employee.manager_id = result;
 						database.insertNewRecord("employee",employee);
+						screenMessages.confirmChange();
 					});
 				});
 				break;
@@ -102,6 +105,7 @@ async function init(){
 						delete emp[0]["manager_id"]; 
 
 						database.updateAValue("employee",emp[0]);
+						screenMessages.confirmChange();
 					});
 				});
 				break;
@@ -120,6 +124,7 @@ async function init(){
 					emp[0].manager_id = man[0].id;
 
 					database.updateAValue("employee",emp[0]);
+					screenMessages.confirmChange();
 
 				});
 				break;
@@ -132,6 +137,7 @@ async function init(){
 					emp = result.filter(r => r.full_name === emp.name)
 
 					database.deleteAValue("employee", emp[0].id);
+					screenMessages.confirmChange();
 
 				});
 				break;
@@ -144,6 +150,7 @@ async function init(){
 					role = result.filter(r => r.title === role.role)
 
 					database.deleteAValue("role", role[0].id);
+					screenMessages.confirmChange();
 				});
 				break;
 			case("delete department"):
@@ -155,6 +162,7 @@ async function init(){
 					dept = result.filter(r => r.name === dept.dept)
 
 					database.deleteAValue("department", dept[0].id);
+					screenMessages.confirmChange();
 				});
 				break;
 			case("show total utilized budget by department"):
