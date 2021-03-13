@@ -1,12 +1,6 @@
 const mysql = require("mysql");
 const screenMessages = require("../utils/screenMessages.js"); 
-
-const connection = mysql.createConnection({
-	host: "localhost", 
-	user: "root", 
-	password: "root", 
-	database: "employee_db"
-}); 
+const connection = require("./connection.js")
 
 class Database{
 	constructor(){
@@ -15,7 +9,7 @@ class Database{
 			console.log("Connected to database")
 		})
 	}
-	insertNewRecord(table, fields, callback){
+	insertNewRecord(table, fields){
 		let query = connection.query(
 			"INSERT INTO ?? (??) VALUES (?)",[table, Object.keys(fields), Object.values(fields)],
 			function(err, res){
@@ -25,7 +19,7 @@ class Database{
  			}
  		)
 	}
-	updateAValue(table, fields, callback){
+	updateAValue(table, fields){
 		let query = connection.query(
 			"UPDATE ?? SET ?? = ? WHERE id = ?",[table, Object.keys(fields)[1], Object.values(fields)[1], fields.id],
 			function(err, res){
@@ -34,7 +28,7 @@ class Database{
 			}
 		)
 	}
-	deleteAValue(table, field, callback){
+	deleteAValue(table, field){
 		let query = connection.query(
 			"DELETE FROM ?? WHERE id = ?", [table, field],
 			function(err, res){
@@ -96,27 +90,18 @@ class Database{
 
 			})
 		};
-	getAllDepartments(callback){
+	getAllInfo(field1, field2, table, callback){
 		let query = connection.query(
-			`SELECT DISTINCT d.id, d.name FROM department d`,
+			`SELECT DISTINCT ??, ?? FROM ??`, [field1, field2,table],
 			function(err, res){
 				if (err) throw err; 
 				return callback(res);
 			})
 	}
-	getAllRoles(callback){
-		let query = connection.query(
-			`SELECT DISTINCT r.id, r.title FROM role r`, 
-			function(err, res){
-				if(err) throw err; 
-				return callback(res);
-			}
-		)
-	}
 	getTotalUtilizedSalary(callback){
 		let query = connection.query(
 			`SELECT d.name as Department, 
-	   				sum(r.salary) as 'Total Utilized Budget'
+	   				SUM(r.salary) as 'Total Utilized Budget'
 			FROM employee e 
 			INNER JOIN role r ON r.id = e.role_id
 			INNER JOIN department d on d.id = r.department_id

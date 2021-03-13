@@ -3,16 +3,13 @@ const screenPrompts = require("./utils/screenPrompts.js");
 const database = require("./db/Database.js"); 
 const utils = require("./utils/utils.js");
 
-
 async function init(){
 	try{
 	 	let choice = await screenPrompts.selectAnOptionPrompt();
-
 		switch(choice.choice.toLowerCase()){
 			case("add a department"):
 				let department = await screenPrompts.addDepartmentPrompt();
 				database.insertNewRecord("department", department); 
-		
 				break;
 			case("add a role"):
 				let role = await screenPrompts.addRolePrompt(); 
@@ -41,7 +38,7 @@ async function init(){
 				break;
 			case("view employees by department"):
 				database.getAllEmployees( async (result) =>{
-					database.getAllDepartments( async (result2) =>{
+					database.getAllInfo("id", "name", "department", async (result2) =>{
 						let deptArr = [];
 
 						result2.forEach(r => deptArr.push(r.name))
@@ -49,7 +46,6 @@ async function init(){
 						let dept = await screenPrompts.generateSelectList(deptArr, "name", "Search Employee's for Which Role: ")
 
 						dept = result.filter(r => r.dept_name === dept.name)
-						console.log(dept)
 
 						screenMessages.printAll("Department", dept, true);
 					});
@@ -57,7 +53,7 @@ async function init(){
 				break;
 			case("view employees by role"):
 				database.getAllEmployees( async (result) =>{
-					database.getAllRoles( async (result2) =>{
+					database.getAllInfo("id", "title", "role", async (result2) =>{
 						let roleArr = [];
 
 						result2.forEach(r => roleArr.push(r.title))
@@ -83,9 +79,19 @@ async function init(){
 	
 				});
 				break;
+			case("view all roles"):
+				database.getAllInfo("id", "title", "role", async (result) =>{
+					screenMessages.printAll("Roles", result, false);
+				})
+				break;
+			case("view all departments"):
+				database.getAllInfo("id", "name", "department", async (result) =>{
+					screenMessages.printAll("Departments", result, false);
+				})
+				break;
 			case("update employee role"):
 				database.getAllEmployees( async (result) =>{
-					database.getAllRoles( async (result2) =>{
+					database.getAllInfo("id", "title", "role", async (result2) =>{
 						let empArr = [];
 						let roleArr = [];
 
@@ -134,7 +140,7 @@ async function init(){
 				});
 				break;
 			case("delete role"):
-				database.getAllRoles( async (result) =>{
+				database.getAllInfo("id", "title", "role", async (result2) =>{
 					let roleArr = []; 
 					result.forEach(r => roleArr.push(r.title))
 
@@ -165,7 +171,7 @@ async function init(){
 				database.exit();
 				process.exit(1);
 			default:
-				console.log("Please select an option"); 
+				console.log("How did you even get here?"); 
 				init();
 		}
 	}catch(err){
