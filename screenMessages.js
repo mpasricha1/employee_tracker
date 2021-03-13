@@ -11,6 +11,8 @@ const printWelcomeScreen = () => {
 }; 
 
 const printAll = (name, data) => {
+	data.forEach(d => delete d.manager_id);
+	data.forEach(d => delete d.role_id);
 	console.log("")
 	console.log("")
 	console.table(`${name} List`, data)

@@ -61,7 +61,7 @@ class Database{
 				     WHERE e.manager_id = e2.id) as 'manager_id',
 				    r.id as role_id,
 				    CONCAT(e.first_name, ' ',e.last_name) AS 'full_name',
-				    d.name AS 'dept name',
+				    d.name AS 'dept_name',
 				    r.title, 
 				    r.salary,
 				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
@@ -79,8 +79,8 @@ class Database{
 	getAllEmployeesFiltered(field, value, callback){
 		let query = connection.query(
 			`SELECT e.id,
-					CONCAT(e.first_name, ' ',e.last_name) AS 'full name',
-				    d.name AS 'dept name',
+					CONCAT(e.first_name, ' ',e.last_name) AS 'full_name',
+				    d.name AS 'dept_name',
 				    r.title, 
 				    r.salary,
 				    (SELECT CONCAT(e2.first_name, ' ',e2.last_name) 
@@ -98,7 +98,7 @@ class Database{
 		};
 	getAllDepartments(callback){
 		let query = connection.query(
-			`SELECT d.id, d.name FROM department d`,
+			`SELECT DISTINCT d.id, d.name FROM department d`,
 			function(err, res){
 				if (err) throw err; 
 				return callback(res);
@@ -106,8 +106,7 @@ class Database{
 	}
 	getAllRoles(callback){
 		let query = connection.query(
-			`SELECT r.id, r.title, r.salary, d.name as "department_name" FROM role r 
-				INNER JOIN department d on d.id = r.department_id`, 
+			`SELECT DISTINCT r.id, r.title FROM role r`, 
 			function(err, res){
 				if(err) throw err; 
 				return callback(res);

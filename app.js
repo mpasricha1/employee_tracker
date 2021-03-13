@@ -38,37 +38,48 @@ async function init(){
 					screenMessages.printAll("Employee", result)
 				});
 				break;
-			case("view all employees by department"):
-				database.getAllDepartments( async (result) =>{
-					let deptArr = []; 
-					result.forEach(r => deptArr.push(r.name))
-					let dept = await screenPrompts.generateSelectList(deptArr, "department", "Search Employee's for Which department: ")
+			case("view employees by department"):
+				database.getAllEmployees( async (result) =>{
+					database.getAllDepartments( async (result2) =>{
+						let deptArr = [];
 
-					database.getAllEmployeesFiltered("d\.name", dept.department, (result) =>{
-						screenMessages.printAll("Department", result);
-					}) 
+						result2.forEach(r => deptArr.push(r.name))
+
+						let dept = await screenPrompts.generateSelectList(deptArr, "name", "Search Employee's for Which Role: ")
+
+						dept = result.filter(r => r.dept_name === dept.name)
+						console.log(dept)
+
+						screenMessages.printAll("Department", dept);
+					});
 				});
 				break;
-			case("view all employees by role"):
-				database.getAllRoles( async (result) =>{
-					let roleArr = []; 
-					result.forEach(r => roleArr.push(r.title))
-					let role = await screenPrompts.generateSelectList(roleArr, "title", "Search Employee's for Which Role: ")
-					console.log(role)
-					database.getAllEmployeesFiltered("r.title", role.title, (result) =>{
-						screenMessages.printAll("Role", result);
-					}) 
+			case("view employees by role"):
+				database.getAllEmployees( async (result) =>{
+					database.getAllRoles( async (result2) =>{
+						let roleArr = [];
+
+						result2.forEach(r => roleArr.push(r.title))
+
+						let role = await screenPrompts.generateSelectList(roleArr, "name", "Search Employee's for Which Role: ")
+
+						role = result.filter(r => r.title === role.name)
+
+						screenMessages.printAll("Role", role);
+					});
 				});
 				break;
-			case("view all employees by manager"):
-				database.getAllRoles( async (result) =>{
-					let roleArr = []; 
-					result.forEach(r => roleArr.push(r.title))
-					let role = await screenPrompts.generateSelectList(roleArr, "title", "Search Employee's for Which Role: ")
-					console.log(role)
-					database.getAllEmployeesFiltered("r.title", role.title, (result) =>{
-						screenMessages.printAll("Role", result);
-					}) 
+			case("view employees by manager"):
+				database.getAllEmployees( async (result) =>{
+					let empArr = [];
+
+					result.forEach(r => empArr.push(r.full_name))
+
+					let man = await screenPrompts.generateSelectList(empArr, "name", "Search employee's for which manager: ")
+					emp = result.filter(r => r.manager_name === man.name);
+
+					screenMessages.printAll("Manager", emp);
+	
 				});
 				break;
 			case("update employee role"):
@@ -124,7 +135,7 @@ async function init(){
 
 				});
 				break;
-			case("delete a role"):
+			case("delete role"):
 				database.getAllRoles( async (result) =>{
 					let roleArr = []; 
 					result.forEach(r => roleArr.push(r.title))
@@ -135,7 +146,7 @@ async function init(){
 					database.deleteAValue("role", role[0].id);
 				});
 				break;
-			case("delete a department"):
+			case("delete department"):
 				database.getAllDepartments( async (result) =>{
 					let deptArr = []; 
 					result.forEach(r => deptArr.push(r.name))

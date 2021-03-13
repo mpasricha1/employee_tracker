@@ -6,9 +6,9 @@ const selectAnOptionPrompt = () => {
 			type: "list", 
 			name: "choice", 
 			message: "What would you like to do?",
-			choices: ["View All Employees", "View All Employees By Department", "View All Employees By Role", 
+			choices: ["View All Employees", "View Employees By Department", "View Employees By Role", 
 				   "View Employees by Manager", "Add An Employee", "Add A Role", "Add A Department", 
-				   "Update Employee Manager", "Update Employee Role", "Delete Employee", "Delete a Role", "Delete a Department", 
+				   "Update Employee Manager", "Update Employee Role", "Delete Employee", "Delete Role", "Delete Department", 
 				   "Show Total Utilized Budget By Department"]
 		}
 	])
